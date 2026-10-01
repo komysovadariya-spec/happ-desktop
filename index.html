@@ -1,0 +1,239 @@
+<title>Анкета клиента</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Inter:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #F7F5F1;
+    --surface: #FFFFFF;
+    --border: #DAD7D1;
+    --text: #292929;
+    --muted: #77746F;
+    --accent: #4F625B;
+    --accent-hover: #3C4D47;
+    --accent-light: #E9EEEB;
+    --danger: #9B3A3A;
+    --section-bg: #F2F0EC;
+    --shadow: 0 2px 12px rgba(79,98,91,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 32px 16px;
+  }
+
+  .container { max-width: 580px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 32px; }
+
+  .header .logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .header p { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  .card {
+    background: var(--surface);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .field-row.single { grid-template-columns: 1fr; }
+  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+  @media (max-width: 480px) {
+    .field-row, .field-row.triple { grid-template-columns: 1fr; }
+  }
+
+  .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+  .field:last-child { margin-bottom: 0; }
+
+  label { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.02em; }
+  label .req { color: var(--danger); margin-left: 2px; }
+
+  input[type="text"], input[type="tel"] {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+  input::placeholder { color: var(--muted); opacity: 0.6; }
+  input.invalid { border-color: var(--danger); }
+
+  .child-block { background: var(--section-bg); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .child-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .child-num { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; color: var(--accent); }
+  .remove-child { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; padding: 0 4px; }
+  .remove-child:hover { color: var(--danger); }
+
+  .btn-add {
+    width: 100%;
+    background: var(--accent-light);
+    color: var(--accent);
+    border: 1.5px dashed var(--accent);
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+
+  .btn-submit:hover { background: var(--accent-hover); }
+  .note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .error-msg { color: var(--danger); font-size: 12px; margin-top: 3px; display: none; }
+</style>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">АН ЦАН • Новостройки Владивостока</div>
+    <h1>Анкета клиента</h1>
+    <p>Риелтор <strong>Новикова Дарья</strong> — заполните данные</p>
+  </div>
+
+  <form id="clientForm" action="https://formsubmit.co/komysovadariya@gmail.com" method="POST" novalidate>
+    <input type="hidden" name="_subject" value="📋 Анкета клиента — Новикова Дарья">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+
+    <div class="card">
+      <div class="section-title">Клиент</div>
+      <div class="field-row triple">
+        <div class="field">
+          <label>Фамилия <span class="req">*</span></label>
+          <input type="text" name="Фамилия" id="cl_last" placeholder="Иванова">
+        </div>
+        <div class="field">
+          <label>Имя <span class="req">*</span></label>
+          <input type="text" name="Имя" id="cl_first" placeholder="Мария">
+        </div>
+        <div class="field">
+          <label>Отчество</label>
+          <input type="text" name="Отчество" placeholder="Петровна">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Дата рождения</label>
+          <input type="text" name="Дата рождения" placeholder="ДД.ММ.ГГГГ">
+        </div>
+        <div class="field">
+          <label>Телефон <span class="req">*</span></label>
+          <input type="tel" name="Телефон" id="cl_phone" placeholder="+7 900 000 00 00">
+          <span class="error-msg" id="cl_phone_err">Введите номер телефона</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Супруг / Супруга</div>
+      <div class="field-row triple">
+        <div class="field"><label>Фамилия</label><input type="text" name="Фамилия супруга" placeholder="Иванов"></div>
+        <div class="field"><label>Имя</label><input type="text" name="Имя супруга" placeholder="Алексей"></div>
+        <div class="field"><label>Отчество</label><input type="text" name="Отчество супруга" placeholder="Николаевич"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Дата рождения</label><input type="text" name="Дата рождения супруга" placeholder="ДД.ММ.ГГГГ"></div>
+        <div class="field"><label>Телефон</label><input type="tel" name="Телефон супруга" placeholder="+7 900 000 00 00"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Дети</div>
+      <div id="children-list"></div>
+      <button type="button" class="btn-add" id="add-child"><span>＋</span> Добавить ребёнка</button>
+    </div>
+
+    <button type="submit" class="btn-submit">Отправить →</button>
+    <p class="note">Данные придут риелтору на email</p>
+  </form>
+</div>
+
+<script>
+  let childCount = 0;
+  function addChild() {
+    childCount++;
+    const n = childCount;
+    const div = document.createElement('div');
+    div.className = 'child-block';
+    div.id = 'child_' + n;
+    div.innerHTML = '<div class="child-header"><span class="child-num">Ребёнок ' + n + '</span><button type="button" class="remove-child" onclick="removeChild(' + n + ')">×</button></div><div class="field-row triple"><div class="field"><label>Фамилия</label><input type="text" name="Ребёнок ' + n + ' — фамилия" placeholder="Иванова"></div><div class="field"><label>Имя</label><input type="text" name="Ребёнок ' + n + ' — имя" placeholder="Анна"></div><div class="field"><label>Отчество</label><input type="text" name="Ребёнок ' + n + ' — отчество" placeholder="Алексеевна"></div></div><div class="field-row"><div class="field"><label>Дата рождения</label><input type="text" name="Ребёнок ' + n + ' — дата рождения" placeholder="ДД.ММ.ГГГГ"></div><div class="field"><label>Телефон (если 14+)</label><input type="tel" name="Ребёнок ' + n + ' — телефон" placeholder="+7 900 000 00 00"></div></div>';
+    document.getElementById('children-list').appendChild(div);
+  }
+  function removeChild(n) { const el = document.getElementById('child_' + n); if (el) el.remove(); }
+  document.getElementById('add-child').addEventListener('click', addChild);
+  document.getElementById('clientForm').addEventListener('submit', function(e) {
+    let ok = true;
+    ['cl_last','cl_first','cl_phone'].forEach(function(id) {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) { el.classList.add('invalid'); ok = false; }
+      else el.classList.remove('invalid');
+    });
+    const phoneErr = document.getElementById('cl_phone_err');
+    if (!document.getElementById('cl_phone').value.trim()) { phoneErr.style.display = 'block'; ok = false; }
+    else phoneErr.style.display = 'none';
+    if (!ok) e.preventDefault();
+  });
+</script>
