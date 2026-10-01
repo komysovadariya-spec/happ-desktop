@@ -27,7 +27,6 @@
   }
 
   .container { max-width: 580px; margin: 0 auto; }
-
   .header { text-align: center; margin-bottom: 32px; }
 
   .header .logo {
@@ -74,7 +73,6 @@
   .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .field-row.single { grid-template-columns: 1fr; }
   .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
 
   @media (max-width: 480px) {
@@ -139,11 +137,35 @@
     font-weight: 700;
     cursor: pointer;
     margin-top: 4px;
+    transition: background 0.15s;
   }
 
   .btn-submit:hover { background: var(--accent-hover); }
+  .btn-submit:disabled { opacity: 0.7; cursor: default; }
+
   .note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 10px; }
   .error-msg { color: var(--danger); font-size: 12px; margin-top: 3px; display: none; }
+
+  .success-box {
+    display: none;
+    background: #EAF4ED;
+    border: 1.5px solid #A8C8B0;
+    border-radius: 16px;
+    padding: 48px 24px;
+    text-align: center;
+  }
+
+  .success-box .icon { font-size: 52px; margin-bottom: 16px; }
+
+  .success-box h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2D6A4F;
+    margin-bottom: 8px;
+  }
+
+  .success-box p { color: #52796F; font-size: 14px; }
 </style>
 
 <div class="container">
@@ -153,10 +175,13 @@
     <p>Риелтор <strong>Новикова Дарья</strong> — заполните данные</p>
   </div>
 
-  <form id="clientForm" action="https://formsubmit.co/komysovadariya@gmail.com" method="POST" novalidate>
-    <input type="hidden" name="_subject" value="📋 Анкета клиента — Новикова Дарья">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_template" value="table">
+  <div class="success-box" id="successBox">
+    <div class="icon">✅</div>
+    <h2>Данные отправлены успешно!</h2>
+    <p>Риелтор свяжется с вами в ближайшее время</p>
+  </div>
+
+  <form id="clientForm" novalidate>
 
     <div class="card">
       <div class="section-title">Клиент</div>
@@ -213,27 +238,77 @@
 
 <script>
   let childCount = 0;
+
   function addChild() {
     childCount++;
     const n = childCount;
     const div = document.createElement('div');
     div.className = 'child-block';
     div.id = 'child_' + n;
-    div.innerHTML = '<div class="child-header"><span class="child-num">Ребёнок ' + n + '</span><button type="button" class="remove-child" onclick="removeChild(' + n + ')">×</button></div><div class="field-row triple"><div class="field"><label>Фамилия</label><input type="text" name="Ребёнок ' + n + ' — фамилия" placeholder="Иванова"></div><div class="field"><label>Имя</label><input type="text" name="Ребёнок ' + n + ' — имя" placeholder="Анна"></div><div class="field"><label>Отчество</label><input type="text" name="Ребёнок ' + n + ' — отчество" placeholder="Алексеевна"></div></div><div class="field-row"><div class="field"><label>Дата рождения</label><input type="text" name="Ребёнок ' + n + ' — дата рождения" placeholder="ДД.ММ.ГГГГ"></div><div class="field"><label>Телефон (если 14+)</label><input type="tel" name="Ребёнок ' + n + ' — телефон" placeholder="+7 900 000 00 00"></div></div>';
+    div.innerHTML =
+      '<div class="child-header"><span class="child-num">Ребёнок ' + n + '</span>' +
+      '<button type="button" class="remove-child" onclick="removeChild(' + n + ')">×</button></div>' +
+      '<div class="field-row triple">' +
+        '<div class="field"><label>Фамилия</label><input type="text" name="Ребёнок ' + n + ' фамилия" placeholder="Иванова"></div>' +
+        '<div class="field"><label>Имя</label><input type="text" name="Ребёнок ' + n + ' имя" placeholder="Анна"></div>' +
+        '<div class="field"><label>Отчество</label><input type="text" name="Ребёнок ' + n + ' отчество" placeholder="Алексеевна"></div>' +
+      '</div>' +
+      '<div class="field-row">' +
+        '<div class="field"><label>Дата рождения</label><input type="text" name="Ребёнок ' + n + ' дата рождения" placeholder="ДД.ММ.ГГГГ"></div>' +
+        '<div class="field"><label>Телефон (если 14+)</label><input type="tel" name="Ребёнок ' + n + ' телефон" placeholder="+7 900 000 00 00"></div>' +
+      '</div>';
     document.getElementById('children-list').appendChild(div);
   }
-  function removeChild(n) { const el = document.getElementById('child_' + n); if (el) el.remove(); }
+
+  function removeChild(n) {
+    const el = document.getElementById('child_' + n);
+    if (el) el.remove();
+  }
+
   document.getElementById('add-child').addEventListener('click', addChild);
+
   document.getElementById('clientForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
     let ok = true;
-    ['cl_last','cl_first','cl_phone'].forEach(function(id) {
+    ['cl_last', 'cl_first', 'cl_phone'].forEach(function(id) {
       const el = document.getElementById(id);
       if (!el.value.trim()) { el.classList.add('invalid'); ok = false; }
       else el.classList.remove('invalid');
     });
     const phoneErr = document.getElementById('cl_phone_err');
-    if (!document.getElementById('cl_phone').value.trim()) { phoneErr.style.display = 'block'; ok = false; }
-    else phoneErr.style.display = 'none';
-    if (!ok) e.preventDefault();
+    if (!document.getElementById('cl_phone').value.trim()) {
+      phoneErr.style.display = 'block'; ok = false;
+    } else {
+      phoneErr.style.display = 'none';
+    }
+    if (!ok) return;
+
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Отправляем...';
+    btn.disabled = true;
+
+    const data = {};
+    new FormData(this).forEach(function(v, k) { if (v) data[k] = v; });
+    data['_subject'] = 'Анкета клиента — Новикова Дарья';
+    data['_template'] = 'table';
+    data['_captcha'] = 'false';
+
+    fetch('https://formsubmit.co/ajax/komysovadariya@gmail.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      document.getElementById('clientForm').style.display = 'none';
+      document.getElementById('successBox').style.display = 'block';
+      window.scrollTo(0, 0);
+    })
+    .catch(function() {
+      btn.textContent = 'Отправить →';
+      btn.disabled = false;
+      alert('Ошибка отправки. Попробуйте ещё раз.');
+    });
   });
 </script>
