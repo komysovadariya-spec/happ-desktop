@@ -39,13 +39,7 @@
     margin-bottom: 10px;
   }
 
-  .header h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
+  .header h1 { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); }
   .header p { color: var(--muted); font-size: 14px; margin-top: 6px; }
 
   .card {
@@ -188,25 +182,25 @@
       <div class="field-row triple">
         <div class="field">
           <label>Фамилия <span class="req">*</span></label>
-          <input type="text" name="Фамилия" id="cl_last" placeholder="Иванова">
+          <input type="text" id="cl_last" placeholder="Иванова">
         </div>
         <div class="field">
           <label>Имя <span class="req">*</span></label>
-          <input type="text" name="Имя" id="cl_first" placeholder="Мария">
+          <input type="text" id="cl_first" placeholder="Мария">
         </div>
         <div class="field">
           <label>Отчество</label>
-          <input type="text" name="Отчество" placeholder="Петровна">
+          <input type="text" id="cl_mid" placeholder="Петровна">
         </div>
       </div>
       <div class="field-row">
         <div class="field">
           <label>Дата рождения</label>
-          <input type="text" name="Дата рождения" placeholder="ДД.ММ.ГГГГ">
+          <input type="text" id="cl_dob" placeholder="ДД.ММ.ГГГГ">
         </div>
         <div class="field">
           <label>Телефон <span class="req">*</span></label>
-          <input type="tel" name="Телефон" id="cl_phone" placeholder="+7 900 000 00 00">
+          <input type="tel" id="cl_phone" placeholder="+7 900 000 00 00">
           <span class="error-msg" id="cl_phone_err">Введите номер телефона</span>
         </div>
       </div>
@@ -215,13 +209,13 @@
     <div class="card">
       <div class="section-title">Супруг / Супруга</div>
       <div class="field-row triple">
-        <div class="field"><label>Фамилия</label><input type="text" name="Фамилия супруга" placeholder="Иванов"></div>
-        <div class="field"><label>Имя</label><input type="text" name="Имя супруга" placeholder="Алексей"></div>
-        <div class="field"><label>Отчество</label><input type="text" name="Отчество супруга" placeholder="Николаевич"></div>
+        <div class="field"><label>Фамилия</label><input type="text" id="sp_last" placeholder="Иванов"></div>
+        <div class="field"><label>Имя</label><input type="text" id="sp_first" placeholder="Алексей"></div>
+        <div class="field"><label>Отчество</label><input type="text" id="sp_mid" placeholder="Николаевич"></div>
       </div>
       <div class="field-row">
-        <div class="field"><label>Дата рождения</label><input type="text" name="Дата рождения супруга" placeholder="ДД.ММ.ГГГГ"></div>
-        <div class="field"><label>Телефон</label><input type="tel" name="Телефон супруга" placeholder="+7 900 000 00 00"></div>
+        <div class="field"><label>Дата рождения</label><input type="text" id="sp_dob" placeholder="ДД.ММ.ГГГГ"></div>
+        <div class="field"><label>Телефон</label><input type="tel" id="sp_phone" placeholder="+7 900 000 00 00"></div>
       </div>
     </div>
 
@@ -239,29 +233,34 @@
 <script>
   let childCount = 0;
 
+  function g(id) {
+    var el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
   function addChild() {
     childCount++;
-    const n = childCount;
-    const div = document.createElement('div');
+    var n = childCount;
+    var div = document.createElement('div');
     div.className = 'child-block';
     div.id = 'child_' + n;
     div.innerHTML =
       '<div class="child-header"><span class="child-num">Ребёнок ' + n + '</span>' +
       '<button type="button" class="remove-child" onclick="removeChild(' + n + ')">×</button></div>' +
       '<div class="field-row triple">' +
-        '<div class="field"><label>Фамилия</label><input type="text" name="Ребёнок ' + n + ' фамилия" placeholder="Иванова"></div>' +
-        '<div class="field"><label>Имя</label><input type="text" name="Ребёнок ' + n + ' имя" placeholder="Анна"></div>' +
-        '<div class="field"><label>Отчество</label><input type="text" name="Ребёнок ' + n + ' отчество" placeholder="Алексеевна"></div>' +
+        '<div class="field"><label>Фамилия</label><input type="text" id="ch' + n + '_last" placeholder="Иванова"></div>' +
+        '<div class="field"><label>Имя</label><input type="text" id="ch' + n + '_first" placeholder="Анна"></div>' +
+        '<div class="field"><label>Отчество</label><input type="text" id="ch' + n + '_mid" placeholder="Алексеевна"></div>' +
       '</div>' +
       '<div class="field-row">' +
-        '<div class="field"><label>Дата рождения</label><input type="text" name="Ребёнок ' + n + ' дата рождения" placeholder="ДД.ММ.ГГГГ"></div>' +
-        '<div class="field"><label>Телефон (если 14+)</label><input type="tel" name="Ребёнок ' + n + ' телефон" placeholder="+7 900 000 00 00"></div>' +
+        '<div class="field"><label>Дата рождения</label><input type="text" id="ch' + n + '_dob" placeholder="ДД.ММ.ГГГГ"></div>' +
+        '<div class="field"><label>Телефон (если 14+)</label><input type="tel" id="ch' + n + '_phone" placeholder="+7 900 000 00 00"></div>' +
       '</div>';
     document.getElementById('children-list').appendChild(div);
   }
 
   function removeChild(n) {
-    const el = document.getElementById('child_' + n);
+    var el = document.getElementById('child_' + n);
     if (el) el.remove();
   }
 
@@ -270,34 +269,66 @@
   document.getElementById('clientForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    let ok = true;
+    var ok = true;
     ['cl_last', 'cl_first', 'cl_phone'].forEach(function(id) {
-      const el = document.getElementById(id);
+      var el = document.getElementById(id);
       if (!el.value.trim()) { el.classList.add('invalid'); ok = false; }
       else el.classList.remove('invalid');
     });
-    const phoneErr = document.getElementById('cl_phone_err');
-    if (!document.getElementById('cl_phone').value.trim()) {
-      phoneErr.style.display = 'block'; ok = false;
-    } else {
-      phoneErr.style.display = 'none';
-    }
+    var phoneErr = document.getElementById('cl_phone_err');
+    if (!g('cl_phone')) { phoneErr.style.display = 'block'; ok = false; }
+    else phoneErr.style.display = 'none';
     if (!ok) return;
 
-    const btn = document.querySelector('.btn-submit');
+    var btn = document.querySelector('.btn-submit');
     btn.textContent = 'Отправляем...';
     btn.disabled = true;
 
-    const data = {};
-    new FormData(this).forEach(function(v, k) { if (v) data[k] = v; });
-    data['_subject'] = 'Анкета клиента — Новикова Дарья';
-    data['_template'] = 'table';
-    data['_captcha'] = 'false';
+    // Формируем читаемое письмо
+    var lines = [];
+
+    // Клиент
+    var clFio = [g('cl_last'), g('cl_first'), g('cl_mid')].filter(Boolean).join(' ');
+    lines.push('КЛИЕНТ');
+    lines.push('ФИО: ' + clFio);
+    if (g('cl_dob')) lines.push('Дата рождения: ' + g('cl_dob'));
+    lines.push('Телефон: ' + g('cl_phone'));
+
+    // Супруг
+    var spFio = [g('sp_last'), g('sp_first'), g('sp_mid')].filter(Boolean).join(' ');
+    if (spFio) {
+      lines.push('');
+      lines.push('СУПРУГ / СУПРУГА');
+      lines.push('ФИО: ' + spFio);
+      if (g('sp_dob')) lines.push('Дата рождения: ' + g('sp_dob'));
+      if (g('sp_phone')) lines.push('Телефон: ' + g('sp_phone'));
+    }
+
+    // Дети
+    var children = document.querySelectorAll('.child-block');
+    if (children.length > 0) {
+      lines.push('');
+      lines.push('ДЕТИ');
+      children.forEach(function(block, i) {
+        var bid = block.id.replace('child_', '');
+        var chFio = [g('ch'+bid+'_last'), g('ch'+bid+'_first'), g('ch'+bid+'_mid')].filter(Boolean).join(' ');
+        var line = (i+1) + '. ' + (chFio || '—');
+        if (g('ch'+bid+'_dob')) line += ', д.р. ' + g('ch'+bid+'_dob');
+        lines.push(line);
+        if (g('ch'+bid+'_phone')) lines.push('   Телефон: ' + g('ch'+bid+'_phone'));
+      });
+    }
+
+    var message = lines.join('\n');
 
     fetch('https://formsubmit.co/ajax/komysovadariya@gmail.com', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        '_subject': 'Анкета клиента: ' + clFio,
+        '_captcha': 'false',
+        'Анкета': message
+      })
     })
     .then(function(r) { return r.json(); })
     .then(function() {
